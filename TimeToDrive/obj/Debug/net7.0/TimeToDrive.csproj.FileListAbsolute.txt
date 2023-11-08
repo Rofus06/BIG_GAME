@@ -1,0 +1,14 @@
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\bin\Debug\net7.0\TimeToDrive.exe
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\bin\Debug\net7.0\TimeToDrive.deps.json
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\bin\Debug\net7.0\TimeToDrive.runtimeconfig.json
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\bin\Debug\net7.0\TimeToDrive.dll
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\bin\Debug\net7.0\TimeToDrive.pdb
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\obj\Debug\net7.0\TimeToDrive.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\obj\Debug\net7.0\TimeToDrive.AssemblyInfoInputs.cache
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\obj\Debug\net7.0\TimeToDrive.AssemblyInfo.cs
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\obj\Debug\net7.0\TimeToDrive.csproj.CoreCompileInputs.cache
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\obj\Debug\net7.0\TimeToDrive.dll
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\obj\Debug\net7.0\refint\TimeToDrive.dll
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\obj\Debug\net7.0\TimeToDrive.pdb
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\obj\Debug\net7.0\TimeToDrive.genruntimeconfig.cache
+C:\Users\filip.scherlund\Desktop\Test visual\BIG_GAME\TimeToDrive\obj\Debug\net7.0\ref\TimeToDrive.dll
