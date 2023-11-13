@@ -1,23 +1,57 @@
 ﻿using System;
-
-int hp;
-int x = 0;
-int y = 0;
-int score = 0;
-Console.SetCursorPosition (x, y);
-
-Console.WriteLine("Hello and Welcome To My Game TimeToDeive");
-Console.ReadLine();
-Console.WriteLine("The only thing you need to do is to stay on the road");
-Console.ReadLine();
-Console.WriteLine("You are going to use these keys: W, A, S, D");
-Console.ReadLine();
-
-Console.Write("press enter to start");
-while (true)
+using System.Threading;
+class Program
 {
+    static bool keepPlaying = true;
+    static bool gameRunning;
     
+    static void Main()
+    {
+        Console.CursorVisible = false;
+        try
+        {
+            Initialize();
+            LaunchScreen();
+            while (keepPlaying)
+            {
+                InitializeScene();
+                while (gameRunning)
+                {
+                if (Console.WindowHeight < height || Console.WindowWidth < width)
+                    {
+                        consoleSizeError = true;
+                        keepPlaying = false;
+                        break;
+                    }
+                    HandleInput();
+                    Update();
+                    Render();
+                    if (gameRunning)
+                    {
+                        Thread.Sleep(TimeSpan.FromMilliseconds(33));
+                    }
+                }
+                if (keepPlaying)
+                {
+                    GameOverScreen();
+                }
+            }
+            Console.Clear();
+            if (consoleSizeError)
+            {
+                Console.WriteLine("Console window är för liten.");
+                Console.WriteLine($"Minimum storlek är {width} width x {height} height.");
+                Console.WriteLine("Increase storleken du har");
+            }
+            Console.WriteLine("stänger ner");
+        }
+        finally
+        {
+            Console.CursorVisible = true;
+        }
+    }
 }
+
 
 
 
