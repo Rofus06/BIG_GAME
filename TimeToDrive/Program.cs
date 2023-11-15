@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Threading;
+
+//De här är Bil spel som har en infinity loop (spelet tar aldrig slut) och det händer nya grejer hela tiden
 class Program
 {
     static int width = 50; //hur bret consolen ska vara
     static int height = 30; //hur lång consolen ska vara
     static int windowWidth; //hur bret consolen
     static int windowHeight;
-    static bool keepPlaying = true;
+    static int carPosition; // Vart bilen ska vara någonstans
+    static int carSpeed; 
+    static char scene; // 2D-array för att representera spelscenen
+    static bool keepPlaying = true; //om man vill fortsätta spela
     static bool gameRunning;
     static bool consoleSizeError = false;
 
@@ -39,7 +44,7 @@ class Program
                 }
                 if (keepPlaying)
                 {
-                    GameOverScreen(); //Ska vissa game over scene (jag gör allt i odning först)
+                    GameOverScreen(); //Ska vissa game over scene (ska göra koden till det här vid slutet)
                 }
             }
             //om console är för stor eller för litten
@@ -87,7 +92,7 @@ class Program
     static void LaunchScreen()
     {
         Console.Clear();
-        Console.WriteLine("Detta är ett bilspel.");
+        Console.WriteLine("Detta är ett bilspel Gjort av Rofus.");
         Console.WriteLine();
         Console.WriteLine("Håll dig på vägen!");
         Console.WriteLine();
@@ -98,7 +103,27 @@ class Program
     }
     static void InitializeScene()
     {
-
+        const int roadWidth = 10; // Vägens bredd
+        gameRunning = true;
+        carPosition = width / 2; // Bilens utgångsläge
+        carSpeed = 0; // Initial hastighet av bilen
+        int leftEdge = (width - roadWidth) / 2; // Vänster kant av vägen
+        int rightEdge = leftEdge + roadWidth + 1; // Höger kanten av vägen
+        scene = new char[height, width]; // Initiera spelscenen https://stackoverflow.com/questions/3106110/what-is-move-semantics/3109981#3109981
+        for (int x = 0; x < height; x++)
+        {
+            for (int y = 0; y < width; y++)
+            {
+                if (x < leftEdge || x > rightEdge)
+                {
+                    scene[x, y] = '.'; // Ritar vägen
+                }
+                else
+                {
+                    scene[x, y] = ' '; // Draw the empty space
+                }
+            }
+        }
     }
     
     static void Render()
@@ -106,6 +131,14 @@ class Program
 
     }
 }
+
+    static void GameOverScreen()
+    {
+        Console.Clear();
+        Console.WriteLine("Game Over");
+        Console.WriteLine("Score: {score}");
+        Console.WriteLine("Play again (Y/N)?");
+    }
 
 
 
