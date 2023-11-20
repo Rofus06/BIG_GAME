@@ -10,7 +10,7 @@ class Program
     static int windowHeight;
     static int carPosition; // Vart bilen ska vara någonstans
     static int carSpeed; 
-    static char scene; // 2D-array för att representera spelscenen
+    static char[,] scene; // 2D-array för att representera spelscenen
     static bool keepPlaying = true; //om man vill fortsätta spela
     static bool gameRunning;
     static bool consoleSizeError = false;
@@ -120,7 +120,7 @@ class Program
                 }
                 else
                 {
-                    scene[x, y] = ' '; // Draw the empty space
+                    scene[x, y] = ' '; // Draw the empty space som man kan åka på
                 }
             }
         }
@@ -130,7 +130,7 @@ class Program
     {
 
     }
-}
+
 
     static void GameOverScreen()
     {
@@ -139,7 +139,3 @@ class Program
         Console.WriteLine("Score: {score}");
         Console.WriteLine("Play again (Y/N)?");
     }
-
-
-
-
