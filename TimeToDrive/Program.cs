@@ -10,6 +10,7 @@ class Program
     static int windowHeight;
     static int carPosition; // Vart bilen ska vara någonstans
     static int carSpeed; 
+    static int carVelocity;
     static char[,] scene; // 2D-array för att representera spelscenen
     static bool keepPlaying = true; //om man vill fortsätta spela
     static bool gameRunning;
@@ -128,10 +129,59 @@ class Program
     
     static void Render()
     {
-
+        StringBuilder stringBuilder = new(width * height); // fick ifrån video: https://www.youtube.com/watch?v=KT0O4Z0oDIk&ab_channel=ErvisTrupja OCH https://stackoverflow.com/questions/1532461/stringbuilder-vs-string-concatenation-in-tostring-in-java
+        for (int x = height - 1; x >= 0; x--)
+        {
+            for (int y = 0; y < width; y++)
+            {
+                if (x == 1 && y == carPosition)
+                {
+                    stringBuilder.Append(
+                        !gameRunning ? 'X' :
+                        carVelocity < 0 ? '<' :
+                        carVelocity > 0 ? '>' :
+                        '^');
+                }
+                else
+                {
+                    stringBuilder.Append(scene[x, y]);
+                }
+            }
+            if (x > 0)
+            {
+                stringBuilder.AppendLine();
+            }
+        }
+        Console.SetCursorPosition(0, 0);
+        Console.Write(stringBuilder);
     }
-
-
+    void HandleInput() //i got help from this: https://stackoverflow.com/questions/5891538/listen-for-key-press-in-net-console-app
+    {
+        while (Console.KeyAvailable)
+        {
+            ConsoleKey key = Console.ReadKey(true).Key;
+            switch (key)
+            {
+                case ConsoleKey.A or ConsoleKey.LeftArrow:
+                    carVelocity = -1;
+                    break;
+                case ConsoleKey.D or ConsoleKey.RightArrow:
+                    carVelocity = +1;
+                    break;
+                case ConsoleKey.W or ConsoleKey.UpArrow or ConsoleKey.S or ConsoleKey.DownArrow:
+                    carVelocity = 0;
+                    break;
+                case ConsoleKey.Escape:
+                    gameRunning = false;
+                    keepPlaying = false;
+                    break;
+                case ConsoleKey.Enter:
+                    Console.ReadLine();
+                    break;
+            }
+        }
+    }
+    
     static void GameOverScreen()
     {
         Console.Clear();
@@ -139,3 +189,19 @@ class Program
         Console.WriteLine("Score: {score}");
         Console.WriteLine("Play again (Y/N)?");
     }
+    void Update()
+    {
+        for (int x = 0; x < height - 1; x++)
+        {
+            for (int y = 0; y < width; y++)
+            {
+                scene[x, y] = scene[x + 1, y];
+            }
+        }
+    }
+
+    void PressEnterToContinue()
+    {
+
+    }
+}
