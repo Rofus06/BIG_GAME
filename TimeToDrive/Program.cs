@@ -12,9 +12,11 @@ class Program
     static int carSpeed; 
     static int carVelocity;
     static char[,] scene; // 2D-array för att representera spelscenen
+    int score = 0;
     static bool keepPlaying = true; //om man vill fortsätta spela
     static bool gameRunning;
     static bool consoleSizeError = false;
+    int previousRoadUpdate = 0;
 
     
     static void Main()
@@ -90,7 +92,7 @@ class Program
             Console.BufferHeight = windowHeight;
         }
     }
-    static void LaunchScreen()
+    static void LaunchScreen() //som den säger LaunchScreen vad som står i början
     {
         Console.Clear();
         Console.WriteLine("Detta är ett bilspel Gjort av Rofus.");
@@ -181,13 +183,23 @@ class Program
             }
         }
     }
-    
+
     static void GameOverScreen()
     {
         Console.Clear();
         Console.WriteLine("Game Over");
         Console.WriteLine("Score: {score}");
         Console.WriteLine("Play again (Y/N)?");
+        ConsoleKey key = Console.ReadKey(true).Key;
+        switch (key)
+        {
+            case ConsoleKey.Y:
+            keepPlaying = true;
+            break;
+            case ConsoleKey.N or ConsoleKey.Escape:
+            keepPlaying = false;
+            break;
+        }
     }
     void Update()
     {
@@ -198,6 +210,36 @@ class Program
                 scene[x, y] = scene[x + 1, y];
             }
         }
+        //det här ska göra så det finns en space between mig och the road fick löste det med de här: https://stackoverflow.com/questions/70458693/i-am-doing-my-homework-and-i-stuck-in-one-question-i-am-new-to-java-can-you-he och jag använde chatgpt i början av den här koden
+        int roadUpdate =
+            random.Next(5) < 4 ? previousRoadUpdate :
+            random.Next(3) - 1;
+        if (roadUpdate is -1 && scene[height - 1, 0] is ' ') roadUpdate = 1;
+        if (roadUpdate is 1 && scene[height - 1, width - 1] is ' ') roadUpdate = -1;
+        switch (roadUpdate)
+        {
+            case -1: // left
+                for (int x = 0; x < width - 1; x++)
+                {
+                    scene[height - 1, x] = scene[height - 1, x + 1];
+                }
+                scene[height - 1, width - 1] = '.';
+                break;
+            case 1: // right
+                for (int x = width - 1; x > 0; x--)
+                {
+                    scene[height - 1, x] = scene[height - 1, x - 1];
+                }
+                scene[height - 1, 0] = '.'; 
+                break;
+        }
+        previousRoadUpdate = roadUpdate;
+        carPosition += carVelocity;
+        if (carPosition < 0 || carPosition >= width || scene[1, carPosition] is not ' ')
+        {
+            gameRunning = false;
+        }
+        score++;
     }
 
     void PressEnterToContinue()
