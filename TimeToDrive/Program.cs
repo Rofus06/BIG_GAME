@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading;
 
 //De här är Bil spel som har en infinity loop (spelet tar aldrig slut) och det händer nya grejer hela tiden
@@ -9,14 +10,13 @@ class Program
     static int windowWidth; //hur bret consolen
     static int windowHeight;
     static int carPosition; // Vart bilen ska vara någonstans
-    static int carSpeed; 
     static int carVelocity;
     static char[,] scene; // 2D-array för att representera spelscenen
-    int score = 0;
+    static int score = 0;
     static bool keepPlaying = true; //om man vill fortsätta spela
     static bool gameRunning;
     static bool consoleSizeError = false;
-    int previousRoadUpdate = 0;
+    static int previousRoadUpdate = 0;
 
     
     static void Main()
@@ -65,7 +65,7 @@ class Program
             Console.CursorVisible = true; // vissar cursor
         }
     }
-        static void Initialize()
+    static void Initialize()
     {
         //får consolens bred och högd
         windowWidth = Console.WindowWidth;
@@ -109,7 +109,7 @@ class Program
         const int roadWidth = 10; // Vägens bredd
         gameRunning = true;
         carPosition = width / 2; // Bilens utgångsläge
-        carSpeed = 0; // Initial hastighet av bilen
+        carVelocity = 0; // Initial hastighet av bilen
         int leftEdge = (width - roadWidth) / 2; // Vänster kant av vägen
         int rightEdge = leftEdge + roadWidth + 1; // Höger kanten av vägen
         scene = new char[height, width]; // Initiera spelscenen https://stackoverflow.com/questions/3106110/what-is-move-semantics/3109981#3109981
@@ -157,7 +157,7 @@ class Program
         Console.SetCursorPosition(0, 0);
         Console.Write(stringBuilder);
     }
-    void HandleInput() //i got help from this: https://stackoverflow.com/questions/5891538/listen-for-key-press-in-net-console-app
+    static void HandleInput() //i got help from this: https://stackoverflow.com/questions/5891538/listen-for-key-press-in-net-console-app
     {
         while (Console.KeyAvailable)
         {
@@ -168,7 +168,7 @@ class Program
                     carVelocity = -1;
                     break;
                 case ConsoleKey.D or ConsoleKey.RightArrow:
-                    carVelocity = +1;
+                    carVelocity = 1;
                     break;
                 case ConsoleKey.W or ConsoleKey.UpArrow or ConsoleKey.S or ConsoleKey.DownArrow:
                     carVelocity = 0;
@@ -188,7 +188,7 @@ class Program
     {
         Console.Clear();
         Console.WriteLine("Game Over");
-        Console.WriteLine("Score: {score}");
+        Console.WriteLine($"Score: {score}");
         Console.WriteLine("Play again (Y/N)?");
         ConsoleKey key = Console.ReadKey(true).Key;
         switch (key)
@@ -201,7 +201,7 @@ class Program
             break;
         }
     }
-    void Update()
+    static void Update()
     {
         for (int x = 0; x < height - 1; x++)
         {
@@ -212,8 +212,8 @@ class Program
         }
         //det här ska göra så det finns en space between mig och the road fick löste det med de här: https://stackoverflow.com/questions/70458693/i-am-doing-my-homework-and-i-stuck-in-one-question-i-am-new-to-java-can-you-he och jag använde chatgpt i början av den här koden
         int roadUpdate =
-            random.Next(5) < 4 ? previousRoadUpdate :
-            random.Next(3) - 1;
+            Random.Shared.Next(5) < 4 ? previousRoadUpdate:
+            Random.Shared.Next(3) - 1;
         if (roadUpdate is -1 && scene[height - 1, 0] is ' ') roadUpdate = 1;
         if (roadUpdate is 1 && scene[height - 1, width - 1] is ' ') roadUpdate = -1;
         switch (roadUpdate)
@@ -242,8 +242,16 @@ class Program
         score++;
     }
 
-    void PressEnterToContinue()
+    static void PressEnterToContinue()
     {
-
+        ConsoleKey key = Console.ReadKey(true).Key;
+        switch (key)
+        {
+            case ConsoleKey.Enter:
+                break;
+            case ConsoleKey.Escape:
+                keepPlaying = false;
+                break;
+        }  
     }
 }
