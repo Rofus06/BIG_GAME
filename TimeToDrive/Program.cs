@@ -31,7 +31,7 @@ class Program
                 InitializeScene();
                 while (gameRunning)
                 {
-                if (Console.WindowHeight < height || Console.WindowWidth < width)
+                if (Console.WindowHeight < height || Console.WindowWidth < width) //storleken på cmd
                     {
                         consoleSizeError = true;
                         keepPlaying = false;
@@ -117,7 +117,7 @@ class Program
         {
             for (int y = 0; y < width; y++)
             {
-                if (x < leftEdge || x > rightEdge)
+                if (y < leftEdge || y > rightEdge)
                 {
                     scene[x, y] = '.'; // Ritar vägen
                 }
@@ -138,11 +138,11 @@ class Program
             {
                 if (x == 1 && y == carPosition)
                 {
-                    stringBuilder.Append(
-                        !gameRunning ? 'X' :
-                        carVelocity < 0 ? '<' :
-                        carVelocity > 0 ? '>' :
-                        '^');
+                    stringBuilder.Append( //vad som vissas in cmd när du kör
+                        !gameRunning ? 'X' : //utanför (gräset)
+                        carVelocity < 0 ? '<' : //om bilen åker vänster vissas det här
+                        carVelocity > 0 ? '>' : //om det är höger vissas det här
+                        '^'); //om man åker rakt fram vissas det här
                 }
                 else
                 {
@@ -164,16 +164,16 @@ class Program
             ConsoleKey key = Console.ReadKey(true).Key;
             switch (key)
             {
-                case ConsoleKey.A or ConsoleKey.LeftArrow:
+                case ConsoleKey.A or ConsoleKey.LeftArrow: //om du vill köra vänster
                     carVelocity = -1;
                     break;
-                case ConsoleKey.D or ConsoleKey.RightArrow:
+                case ConsoleKey.D or ConsoleKey.RightArrow: //om du vill köra höger
                     carVelocity = 1;
                     break;
-                case ConsoleKey.W or ConsoleKey.UpArrow or ConsoleKey.S or ConsoleKey.DownArrow:
+                case ConsoleKey.W or ConsoleKey.UpArrow or ConsoleKey.S or ConsoleKey.DownArrow: //gör så om du vill stanna för att det går rakt fram så stannar du
                     carVelocity = 0;
                     break;
-                case ConsoleKey.Escape:
+                case ConsoleKey.Escape: //allt stängs ner
                     gameRunning = false;
                     keepPlaying = false;
                     break;
@@ -184,21 +184,24 @@ class Program
         }
     }
 
-    static void GameOverScreen()
+    static void GameOverScreen() //när spelet är över (du dog) vissas det här
     {
-        Console.Clear();
+        Console.SetCursorPosition(0, 0);
         Console.WriteLine("Game Over");
-        Console.WriteLine($"Score: {score}");
+        Console.WriteLine($"Score: {score}"); // får score du fick innan du dog
         Console.WriteLine("Play again (Y/N)?");
+        GetInput: //gör så man kan inte trycka på någon annan knap
         ConsoleKey key = Console.ReadKey(true).Key;
         switch (key)
         {
-            case ConsoleKey.Y:
+            case ConsoleKey.Y: //om speleren vill spela igen 
             keepPlaying = true;
             break;
-            case ConsoleKey.N or ConsoleKey.Escape:
+            case ConsoleKey.N or ConsoleKey.Escape: //om spelaren vill inte spela igen
             keepPlaying = false;
             break;
+            default:
+                goto GetInput;
         }
     }
     static void Update()
@@ -210,14 +213,20 @@ class Program
                 scene[x, y] = scene[x + 1, y];
             }
         }
-        //det här ska göra så det finns en space between mig och the road fick löste det med de här: https://stackoverflow.com/questions/70458693/i-am-doing-my-homework-and-i-stuck-in-one-question-i-am-new-to-java-can-you-he och jag använde chatgpt i början av den här koden
+        //det här ska göra så det finns en space between mig och the road, fick löste det med de här: https://stackoverflow.com/questions/70458693/i-am-doing-my-homework-and-i-stuck-in-one-question-i-am-new-to-java-can-you-he och jag använde chatgpt i början av den här koden
         int roadUpdate =
-            Random.Shared.Next(5) < 4 ? previousRoadUpdate:
+            Random.Shared.Next(5) < 4 ? previousRoadUpdate :
             Random.Shared.Next(3) - 1;
-        if (roadUpdate is -1 && scene[height - 1, 0] is ' ') roadUpdate = 1;
-        if (roadUpdate is 1 && scene[height - 1, width - 1] is ' ') roadUpdate = -1;
-        switch (roadUpdate)
+        if (roadUpdate == -1 && scene[height - 1, 0] == ' ')
         {
+            roadUpdate = 1;
+        }
+        if (roadUpdate == 1 && scene[height - 1, width - 1] == ' ')
+        {
+            roadUpdate = -1;
+        }
+        switch (roadUpdate)
+        { 
             case -1: // left
                 for (int x = 0; x < width - 1; x++)
                 {
@@ -230,12 +239,12 @@ class Program
                 {
                     scene[height - 1, x] = scene[height - 1, x - 1];
                 }
-                scene[height - 1, 0] = '.'; 
+                scene[height - 1, 0] = '.';
                 break;
         }
         previousRoadUpdate = roadUpdate;
         carPosition += carVelocity;
-        if (carPosition < 0 || carPosition >= width || scene[1, carPosition] is not ' ')
+        if (carPosition < 0 || carPosition >= width || scene[1, carPosition] != ' ')
         {
             gameRunning = false;
         }
@@ -244,6 +253,7 @@ class Program
 
     static void PressEnterToContinue()
     {
+        GetInput: //gör så man kan inte trycka på någon annan knap
         ConsoleKey key = Console.ReadKey(true).Key;
         switch (key)
         {
@@ -252,6 +262,8 @@ class Program
             case ConsoleKey.Escape:
                 keepPlaying = false;
                 break;
+            default:
+                goto GetInput;
         }  
     }
 }
